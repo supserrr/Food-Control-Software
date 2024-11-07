@@ -29,7 +29,7 @@ This project aims to reduce food waste and help consumers find affordable, good-
 
 ---
 
-#Installation and Setup
+# Installation and Setup
 
 **Prerequisites**
 - Python 3.x
@@ -38,4 +38,6 @@ This project aims to reduce food waste and help consumers find affordable, good-
 1. **Clone the Repository**:
    ```bash
    git clone https://github.com/your-username/food-waste-control-software.git
-2. cd food-waste-control-software
+2. Type:  **cd food-waste-control-software**
+
+3. Type: **python3 main.py **
