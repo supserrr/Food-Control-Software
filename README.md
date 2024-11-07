@@ -35,9 +35,10 @@ This project aims to reduce food waste and help consumers find affordable, good-
 - Python 3.x
 
 # Installation
-1. **Clone the Repository**:
+ **Clone the Repository**:
    ```bash
    git clone https://github.com/your-username/food-waste-control-software.git
-2. Type:  **cd food-waste-control-software**
 
-3. Type: **python3 main.py**
+                cd food-waste-control-software
+
+                          python3 app.py
