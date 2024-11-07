@@ -40,4 +40,4 @@ This project aims to reduce food waste and help consumers find affordable, good-
    git clone https://github.com/your-username/food-waste-control-software.git
 2. Type:  **cd food-waste-control-software**
 
-3. Type: **python3 main.py **
+3. Type: **python3 main.py**
