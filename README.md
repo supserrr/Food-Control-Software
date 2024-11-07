@@ -39,6 +39,6 @@ This project aims to reduce food waste and help consumers find affordable, good-
    ```bash
    git clone https://github.com/your-username/food-waste-control-software.git
 
-                cd food-waste-control-software
+   cd food-waste-control-software
 
-                          python3 app.py
+   python3 app.py
