@@ -6,41 +6,63 @@ The **Food Waste Control Software** is a Python-based terminal application desig
 
 **`Project Mission`**
 
-This project aims to reduce food waste and help consumers find affordable, good-quality food, contributing to both sustainability and community support. By facilitating the connection between food providers and consumers, this software encourages the responsible consumption of resources.
+The mission of this project is to reduce food waste and help consumers find affordable, good-quality food, contributing to both sustainability and community support. By facilitating the connection between food providers and consumers, this software encourages the responsible consumption of resources.
 
 ---
 
 # Features
 
-**`Provider`**
+## Provider
 
-- **Register and Login**: Providers can register with a username, password, and location. Upon registration, providers are automatically logged in.
-- **List Food Items**: Providers can add surplus food listings, including details like item name, quantity, expiration date, price, and discount percentage.
-- **View Profile**: Providers can see all their food listings in their profile, with original and discounted prices displayed.
+- **Register and Login**: Providers sign up with a username, password, email, and location. Upon successful registration, they are automatically logged in.
+- **List Food Items**: Add surplus food listings with details like item name, quantity, expiration date, price, and discount percentage.
+- **View Profile**: Access a comprehensive profile displaying active listings, notifications of successful reservations, total earnings from sold items, and a stock summary.
+- **Update Listings**: Easily update or modify existing food listings.
+- **Earnings Report**: View a summary of earnings from sold food items.
 
-**`Consumers`**
+## Consumer
 
-- **Register and Login**: Consumers register with a username, password, and email. They are automatically logged in after registration.
-- **View Listings**: Consumers can view all available food listings or filter them by location.
-- **Reserve Food**: Consumers can reserve food items, specifying the quantity they want to reserve.
-- **Favorites**: Consumers can add providers to their list of favorites and view them in their profile.
-- **Checkout**: Consumers can review their reserved items, including an order summary with original and discounted prices. They can proceed to payment via various methods (Credit Card, PayPal, or Cash).
-- **Payment Options**: Provides Credit Card, PayPal, and Cash options to complete checkout transactions.
+- **Register and Login**: Consumers sign up with a username, email, and password, and are automatically logged in after registration.
+- **View Listings**: Browse all available food listings or filter by specific criteria, like location.
+- **Reserve Food**: Reserve food items by selecting the desired quantity.
+- **View Cart**: Check reserved items in the cart and proceed to checkout when ready.
+- **Checkout and Payment**: Complete purchases using Credit Card, PayPal, or Cash, with an order summary detailing the original and discounted prices.
+- **View Profile**: Access a profile to view past orders, reserved items, and favorite providers.
+
+---
+
+# User Flow and Interaction
+
+### Provider User Journey
+1. **Registration/Login**: Providers enter their information to register or log in.
+2. **Listing Items**: List surplus food items by specifying details such as name, quantity, price, and expiration date.
+3. **Profile Management**: Check profile for earnings, notifications, and food stock summary.
+4. **Updating Listings**: Update existing listings or view stock status.
+
+### Consumer User Journey
+1. **Registration/Login**: Sign up or log in to start reserving items.
+2. **Browsing Listings**: Explore available food items and select preferred choices.
+3. **Reservation**: Choose the quantity of items to reserve.
+4. **Cart and Checkout**: Review reserved items in the cart and proceed to payment.
+5. **Payment**: Complete the purchase using a preferred payment method.
+6. **Profile Access**: Check profile for order history and reserved items.
 
 ---
 
 # Installation and Setup
 
 **Prerequisites**
-- Python 3.x
+- Python 3.x must be installed on your system.
 
-# Installation
- **Steps**:
+### Installation Steps
+
+1. Clone the repository:
    ```bash
- 1.  git clone https://github.com/supserrr/food-control-software.git
-
- 2.  cd food-control-software
-
- 3.  python3 app.py              
+   git clone https://github.com/supserrr/food-control-software.git
+2. Navigate to the project directory:
+   cd food-control-software
+3. Run the application:
+   python3 app.py
+              
 
 
