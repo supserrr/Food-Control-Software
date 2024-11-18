@@ -1,84 +1,147 @@
-from user import User
-from utils import get_valid_float, get_valid_int
+import json
+from food_control.food_listing import FoodListing, FoodListingManager
+from food_control.checkout import Checkout
+from food_control.utils import save_data_to_file, load_data_from_file
 
-def user_menu(user):
-    if user.role == "provider":
-        print("\n1. List Food\n2. View Profile\n3. Logout")
-    elif user.role == "consumer":
-        print("\n1. View Listings\n2. Reserve Food\n3. View Profile\n4. Checkout\n5. Logout")
-    return input("Choose an option: ")
+class User:
+    def __init__(self, name, email, role):
+        self.name = name
+        self.email = email
+        self.role = role
+        self.cart = []
+        self.orders = []
+        self.listings = []
 
-def run_app():
-    logged_in = False
-    user = None
+    @classmethod
+    def register(cls):
+        name = input("Enter your username: ").strip()
+        email = input("Enter your email: ").strip()
+        password = input("Enter your password: ").strip()
+        role = input("Enter your role (consumer/provider): ").strip().lower()
+        location = input("Enter your location (optional): ").strip()
+        user = cls(name, email, role)
 
-    while True:
-        if not logged_in:
-            print("\nWelcome to the Food Waste Control App!")
-            print("1. Register\n2. Login\n3. Exit")
-            choice = input("Choose an option: ")
+        # Save user data to file
+        users = load_from_file("tests/users.json")  # Load existing users
+        users.append(user.__dict__)  # Append the new user to the list
+        save_to_file("tests/users.json", users)  # Save back to file
 
-            if choice == '1':  # Register
-                username = input("Enter username: ")
-                email = input("Enter email: ")
-                password = input("Enter password: ")
-                role = input("Enter role (provider/consumer): ").strip().lower()
-                location = input("Enter location (for providers only): ") if role == "provider" else None
-                user = User.register(username, email, password, role, location)
-                logged_in = True
+        print(f"Registration successful! Logged in as {name}.")
+        return user  # Return the user object after registration
 
-            elif choice == '2':  # Login
-                email = input("Enter email: ")
-                password = input("Enter password: ")
-                user = User.login(email, password)
-                logged_in = bool(user)
+    @classmethod
+    def login(cls):
+        email = input("Enter your email: ").strip()
+        password = input("Enter your password: ").strip()
 
-            elif choice == '3':  # Exit
-                print("Exiting the application.")
-                break
+        # Load all users from file
+        users = load_from_file("tests/users.json")
+        for entry in users:
+            if entry["email"] == email:
+                return cls(entry["name"], entry["email"], entry["role"])  # Ensure 'name' is set
+        print("Invalid login credentials.")
+        return None
 
-            else:
-                print("Invalid option. Please try again.")
+    def view_listings(self):
+        manager = FoodListingManager()
+        data = manager.listings
+        if data:
+            print("\nAvailable Listings:")
+            for index, item in enumerate(data, start=1):
+                print(f"{index}. {item.name} - Quantity: {item.quantity} - Expires: {item.expiration_date} "
+                      f"- Original Price: ${item.price} - Discount: {item.discount}%")
         else:
-            action = user_menu(user)
+            print("No listings available.")
 
-            if action == '1' and user.role == "provider":  # List food for providers
-                food_name = input("Enter food name: ")
-                quantity = get_valid_int("Enter quantity: ")
-                expiration = input("Enter expiration date (YYYY-MM-DD): ")
-                price = get_valid_float("Enter original price: ")
-                discount = get_valid_float("Enter discount percentage: ")
-                user.list_food(food_name, quantity, expiration, price, discount)
-
-            elif action == '2' and user.role == "provider":  # View profile for providers
-                user.view_profile()
-
-            elif action == '3' and user.role == "provider":  # Logout for providers
-                print("Logging out...")
-                logged_in = False
-
-            elif action == '1' and user.role == "consumer":  # View listings for consumers
-                location = input("Enter location to filter by (or press Enter for all): ").strip()
-                location = location if location else None
-                user.view_listings(location)
-
-            elif action == '2' and user.role == "consumer":  # Reserve food for consumers
-                food_name = input("Enter the name of the food item you wish to reserve: ")
-                quantity = get_valid_int(f"Enter quantity for {food_name}: ")
-                user.reserve_food(food_name, quantity)
-
-            elif action == '3' and user.role == "consumer":  # View profile for consumers
-                user.view_profile()
-
-            elif action == '4' and user.role == "consumer":  # Checkout for consumers
-                user.checkout()
-
-            elif action == '5' and user.role == "consumer":  # Logout for consumers
-                print("Logging out...")
-                logged_in = False
-
+    def reserve_food(self):
+        food_name = input("Enter food name: ").strip()
+        try:
+            quantity = int(input("Enter quantity: ").strip())
+            # Simulating food reservation logic here...
+            manager = FoodListingManager()
+            food_item = next((item for item in manager.listings if item.name == food_name), None)
+            if food_item and food_item.quantity >= quantity:
+                food_item.quantity -= quantity
+                print(f"Successfully reserved {quantity} of {food_name}.")
+                self.cart.append((food_name, quantity))  # Add to cart
             else:
-                print("Invalid choice. Please try again.")
+                print("Insufficient quantity or food not found.")
+        except ValueError:
+            print("Invalid quantity. Please enter a valid number.")
 
-# Start the application
-run_app()
+    def view_profile(self):
+        print(f"\n--- {self.name}'s Profile ---\nEmail: {self.email}")
+        if self.orders:
+            print("\nPast Orders:")
+            for order in self.orders:
+                print(f"- {order}")
+        else:
+            print("\nPast Orders:\nNo past orders.")
+
+    def view_cart(self):
+        if not self.cart:
+            print("\n--- Your Cart ---\nYour cart is empty.")
+        else:
+            print("\n--- Your Cart ---")
+            for item in self.cart:
+                print(f"{item[0]} - Quantity: {item[1]}")
+            checkout = input("Would you like to proceed to checkout? (y/n): ").strip().lower()
+            if checkout == 'y':
+                self.checkout()
+
+    def checkout(self):
+        # Placeholder checkout functionality
+        print("Processing checkout...")
+        total_price = 0
+        for food_name, quantity in self.cart:
+            manager = FoodListingManager()
+            food_item = next((item for item in manager.listings if item.name == food_name), None)
+            if food_item:
+                total_price += food_item.price * quantity
+        print(f"Total Price: ${total_price}")
+        self.orders.append(f"Total: ${total_price}")
+        self.cart.clear()
+
+    def list_food(self):
+        name = input("Enter food name: ").strip()
+        try:
+            quantity = int(input("Enter quantity: ").strip())
+            expiry_date = input("Enter expiration date (YYYY-MM-DD): ").strip()
+            price = float(input("Enter price: ").strip())
+            discount = float(input("Enter discount (%): ").strip())
+            listing = FoodListing(name, quantity, expiry_date, price, discount)
+            manager = FoodListingManager()
+            manager.add_listing(listing)
+            print("Food listed successfully.")
+        except ValueError:
+            print("Invalid input. Please try again.")
+
+    def view_notifications(self):
+        # Placeholder for notifications
+        print("\n--- Notifications ---")
+        # Notifications can be displayed here, such as order confirmations.
+        pass
+
+    def update_listings(self):
+        manager = FoodListingManager()
+        if manager.listings:
+            print("Select a listing to update:")
+            for index, item in enumerate(manager.listings, start=1):
+                print(f"{index}. {item.name}")
+            try:
+                choice = int(input("Enter your choice: ").strip())
+                if 1 <= choice <= len(manager.listings):
+                    # Implement update logic here
+                    item = manager.listings[choice - 1]
+                    print(f"Updating {item.name}")
+                    new_price = float(input(f"Enter new price for {item.name}: ").strip())
+                    new_quantity = int(input(f"Enter new quantity for {item.name}: ").strip())
+                    item.price = new_price
+                    item.quantity = new_quantity
+                    print(f"Updated {item.name} - Price: ${item.price} - Quantity: {item.quantity}")
+                else:
+                    print("Invalid choice.")
+            except ValueError:
+                print("Invalid choice. Please enter a valid number.")
+        else:
+            print("No listings to update.")
