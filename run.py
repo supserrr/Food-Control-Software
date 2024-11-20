@@ -74,7 +74,7 @@ def consumer_menu(user):
         elif choice == "4":
             view_cart(user)
         elif choice == "5":
-            print(f"Logging out {user.username}...")
+            print("Logging out {}...".format(user.username))
             break
         else:
             print("Invalid choice, please try again.")
@@ -97,7 +97,7 @@ def provider_menu(user):
         elif choice == "3":
             update_listings(user)
         elif choice == "4":
-            print(f"Logging out {user.username}...")
+            print("Logging out {}...".format(user.username))
             break
         else:
             print("Invalid choice, please try again.")
