@@ -1,6 +1,5 @@
 from food_control.user import User
 
-
 def main():
     print("\n--- Welcome to the Food Waste Control System ---")
     while True:
@@ -45,6 +44,10 @@ def login():
 
 def user_menu(user):
     """Displays the menu for the logged-in user."""
+    if user is None:
+        print("No user logged in.")
+        return  # Handle appropriately if no user is logged in
+
     if user.role == "consumer":
         consumer_menu(user)
     elif user.role == "provider":
@@ -218,6 +221,7 @@ def checkout(user):
     else:
         print("Invalid payment method.")
 
+
 def consumer_profile(user):
     """Display the consumer's profile."""
     print("\n--- Profile ---")
@@ -276,13 +280,15 @@ def list_food(user):
         "discount": discount,
         "provider": user.username
     })
-    User.save_data()
-    print(f"Food item {food_name} listed successfully.")
+
+    User.save_data()  # Assuming this method persists the listings
+
+    print(f"{food_name} has been listed successfully.")
 
 
 def update_listings(user):
-    """Allow provider to update their listings."""
-    print("\nAvailable Listings:")
+    """Allow provider to update food listings."""
+    print("\n--- Update Listings ---")
     if not user.listings:
         print("No listings available.")
         return
@@ -290,26 +296,20 @@ def update_listings(user):
     for idx, listing in enumerate(user.listings, start=1):
         print(f"{idx}. {listing['food_name']} - Quantity: {listing['quantity']}")
 
-    choice = input("Enter the number of the item you want to update: ")
+    choice = input("Enter the number of the listing you want to update: ")
     if not choice.isdigit() or int(choice) < 1 or int(choice) > len(user.listings):
         print("Invalid selection.")
         return
 
     selected_listing = user.listings[int(choice) - 1]
-    print(f"Updating {selected_listing['food_name']}:")
-    new_quantity = input(f"Enter new quantity (current: {selected_listing['quantity']}): ")
-    new_expiration = input(f"Enter new expiration date (current: {selected_listing['expiration']}): ")
-    new_price = input(f"Enter new price (current: {selected_listing['price']:.2f}): ")
-    new_discount = input(f"Enter new discount percentage (current: {selected_listing['discount']}): ")
+    new_quantity = input(f"Enter new quantity for {selected_listing['food_name']}: ")
+    if not new_quantity.isdigit() or int(new_quantity) < 0:
+        print("Invalid quantity.")
+        return
 
-    # Only update if values are provided
-    selected_listing['quantity'] = int(new_quantity) if new_quantity else selected_listing['quantity']
-    selected_listing['expiration'] = new_expiration or selected_listing['expiration']
-    selected_listing['price'] = float(new_price) if new_price else selected_listing['price']
-    selected_listing['discount'] = float(new_discount) if new_discount else selected_listing['discount']
-
-    User.save_data()
-    print(f"Listing for {selected_listing['food_name']} updated successfully.")
+    selected_listing['quantity'] = int(new_quantity)
+    User.save_data()  # Save the updated listings
+    print(f"{selected_listing['food_name']} has been updated to {new_quantity} items.")
 
 
 if __name__ == "__main__":
