@@ -62,7 +62,7 @@ The mission of this project is to reduce food waste and help consumers find affo
 2. Navigate to the project directory:
    cd food-control-software
 3. Run the application:
-   python3 app.py
+   python3 run.py
               
 
 
