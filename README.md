@@ -49,20 +49,31 @@ The mission of this project is to reduce food waste and help consumers find affo
 
 ---
 
-# Installation and Setup
-
-**Prerequisites**
-- Python 3.x must be installed on your system.
-
-### Installation Steps
+# Installation Steps
 
 1. Clone the repository:
    ```bash
    git clone https://github.com/supserrr/food-control-software.git
+   ```
+
 2. Navigate to the project directory:
+   ```bash
    cd food-control-software
-3. Run the application:
+   ```
+
+3. Set up a virtual environment (optional but recommended):
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # For Linux/macOS
+   venv\Scripts\activate     # For Windows
+   ```
+
+4. Install the required dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+5. Run the application:
+   ```bash
    python3 run.py
-              
-
-
+   ```
